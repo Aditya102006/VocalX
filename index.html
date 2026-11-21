@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VocalX AI — Separate vocals from any track</title>
+<meta name="description" content="AI-powered vocal and instrumental separation. Upload a track and split it into clean stems.">
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#111521;--line:#242b3b;--muted:#929bad;--text:#f5f7fb;--purple:#9b7bff;--cyan:#55d8d0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#25204a 0,transparent 45%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1080px;margin:auto;padding:28px 22px 70px}.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:76px}.brand{display:flex;gap:11px;align-items:center;font-weight:800;letter-spacing:-.5px;font-size:19px}.logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#5bcbcf);display:grid;place-items:center;color:#090b12;font-size:20px}.pill{border:1px solid #343c50;border-radius:99px;padding:7px 12px;color:#c1c8d7;font-size:12px}
+.hero{text-align:center;max-width:740px;margin:0 auto 38px}.eyebrow{color:#b7a5ff;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}.hero h1{font-size:clamp(38px,7vw,66px);line-height:1.04;letter-spacing:-2.8px;margin:16px 0}.gradient{background:linear-gradient(90deg,#b9a5ff,#68e0d6);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);font-size:17px;margin:0 auto;max-width:580px}
+.workspace{max-width:760px;margin:auto;background:linear-gradient(180deg,#151a29,#10141e);border:1px solid #2a3144;border-radius:24px;padding:24px;box-shadow:0 28px 90px #0008}.drop{border:1.5px dashed #505078;border-radius:18px;min-height:230px;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;cursor:pointer;background:linear-gradient(135deg,#17182a,#111925);transition:.2s}.drop:hover,.drop.drag{border-color:var(--purple);background:#1b1b32}.upload-icon{width:54px;height:54px;border-radius:17px;margin:0 auto 13px;background:#292447;color:#c4b4ff;display:grid;place-items:center;font-size:25px}.drop h3{margin:0 0 5px;font-size:18px}.drop p{margin:0;color:var(--muted);font-size:13px}.filemeta{color:#c6cce0!important;margin-top:10px!important;word-break:break-word}
+.controls{display:flex;gap:14px;align-items:end;margin-top:20px;flex-wrap:wrap}.field{flex:1;min-width:180px}.field label{display:block;color:#aeb6c8;font-size:12px;font-weight:700;margin:0 0 8px}.field select{width:100%;background:#0c101a;border:1px solid #30384b;color:#f2f4fa;padding:13px;border-radius:11px;font:inherit}.btn{border:0;border-radius:12px;padding:14px 22px;background:linear-gradient(100deg,#a58aff,#67d8d1);color:#0a0c13;font-weight:800;font-size:14px;cursor:pointer;min-height:48px;transition:.2s}.btn:disabled{opacity:.4;cursor:not-allowed}.btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.08)}.status{display:none;margin-top:20px;padding:15px;border:1px solid #30384b;border-radius:13px;background:#0c111c;color:#c9d0df}.status.show{display:block}.bar{height:6px;background:#252b3b;border-radius:10px;margin-top:11px;overflow:hidden}.bar span{display:block;width:35%;height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:10px;animation:move 1.4s infinite alternate}@keyframes move{to{transform:translateX(180%)}}
+.result{display:none;margin-top:20px;border-top:1px solid var(--line);padding-top:20px}.result.show{display:block}.result h3{margin:0 0 12px}.download{display:inline-flex;text-decoration:none;margin-top:10px;color:#0b1016;background:var(--cyan);padding:12px 16px;border-radius:10px;font-weight:800}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:900px;margin:54px auto 0}.feature{border:1px solid var(--line);background:#10141e;border-radius:16px;padding:18px}.feature b{display:block;margin:8px 0 4px}.feature p{color:var(--muted);font-size:13px;margin:0}.ico{font-size:21px;color:#b7a5ff}
+footer{text-align:center;color:#737e91;font-size:12px;margin-top:45px}
+@media(max-width:650px){.wrap{padding:20px 14px 50px}.nav{margin-bottom:55px}.workspace{padding:14px;border-radius:19px}.controls{display:block}.field{margin-bottom:13px}.btn{width:100%}.features{grid-template-columns:1fr}.hero h1{letter-spacing:-1.8px}.drop{min-height:210px}}
+</style>
+</head>
+<body><main class="wrap">
+<nav class="nav"><div class="brand"><span class="logo">♫</span> VocalX <span class="gradient">AI</span></div><span class="pill">AI AUDIO STUDIO</span></nav>
+<section class="hero"><div class="eyebrow">Studio-quality stem separation</div><h1>Your music.<br><span class="gradient">Separated by AI.</span></h1><p>Pull vocals away from instrumentals, or split a track into individual stems — all in a few clicks.</p></section>
+<section class="workspace">
+<div class="drop" id="drop"><div><div class="upload-icon">↑</div><h3>Drop your audio here</h3><p>or tap to browse your device · MP3, WAV, FLAC, M4A</p><p class="filemeta" id="filemeta">Maximum upload size: 50 MB</p></div></div>
+<input id="file" type="file" accept="audio/*" hidden>
+<div class="controls"><div class="field"><label for="mode">SEPARATION MODE</label><select id="mode"><option value="two">Vocals + Instrumental</option><option value="four">4 stems (Vocals, Drums, Bass, Other)</option></select></div><button class="btn" id="run" disabled>Separate audio ↗</button></div>
+<div class="status" id="status"><span id="statusText">Preparing your audio…</span><div class="bar"><span></span></div></div>
+<div class="result" id="result"><h3>Your stems are ready</h3><p id="resultText">Download your separated audio files.</p><a class="download" id="download" href="#">Download stems ZIP ↓</a></div>
+</section>
+<section class="features">
+<div class="feature"><span class="ico">◉</span><b>Clean vocal isolation</b><p>Separate the singer from the backing track with AI.</p></div>
+<div class="feature"><span class="ico">♫</span><b>Instrumental extraction</b><p>Create karaoke tracks and practice versions.</p></div>
+<div class="feature"><span class="ico">✳</span><b>Multi-stem export</b><p>Get vocals, drums, bass and other instruments separately.</p></div>
+</section>
+<footer>VocalX AI · Built for creators, singers and music lovers.<br>Only upload audio you own or have permission to process.</footer>
+</main>
+<script>
+const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),run=document.getElementById('run'),meta=document.getElementById('filemeta'),statusBox=document.getElementById('status'),statusText=document.getElementById('statusText'),result=document.getElementById('result'),download=document.getElementById('download');
+let selected=null;
+function choose(f){if(!f)return;if(!f.type.startsWith('audio/')&&!/\.(mp3|wav|flac|m4a|ogg)$/i.test(f.name)){alert('Please choose an audio file.');return}if(f.size>50*1024*1024){alert('File must be 50 MB or smaller.');return}selected=f;meta.textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+' MB';run.disabled=false;result.classList.remove('show')}
+drop.addEventListener('click',()=>fileInput.click());fileInput.addEventListener('change',e=>choose(e.target.files[0]));
+['dragenter','dragover'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>choose(e.dataTransfer.files[0]));
+run.addEventListener('click',async()=>{if(!selected)return;run.disabled=true;result.classList.remove('show');statusBox.classList.add('show');statusText.textContent='AI is separating your track. This can take a few minutes…';
+const data=new FormData();data.append('file',selected);data.append('mode',document.getElementById('mode').value);
+try{const res=await fetch('/api/separate',{method:'POST',body:data});if(!res.ok){let msg='Processing failed';try{msg=(await res.json()).detail||msg}catch{}throw new Error(msg)}
+const blob=await res.blob(),url=URL.createObjectURL(blob);download.href=url;download.download=selected.name.replace(/\.[^.]+$/,'')+'-stems.zip';statusText.textContent='Separation complete ✓';statusBox.querySelector('.bar').style.display='none';result.classList.add('show');}
+catch(err){statusText.textContent='Could not process: '+err.message+' · Check that the AI backend is running.'}
+finally{run.disabled=false}});
+</script></body></html>
